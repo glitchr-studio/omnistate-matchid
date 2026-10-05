@@ -13,6 +13,10 @@ $records[0]->number;                    // the act's number: 129
 $registry->find($records[0]->identifier);
 ```
 
+No framework needed: the package requires `glitchr/omnistate` and `symfony/http-client`.
+`$httpClient` is the HTTP client to call with - the application's, `HttpClient::create()` in
+plain PHP, a `MockHttpClient` in a test.
+
 | | |
 |---|---|
 | Countries | FR (people who died in France, or French abroad, whose death INSEE recorded) |
