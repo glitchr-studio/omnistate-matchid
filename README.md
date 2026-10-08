@@ -25,4 +25,4 @@ plain PHP, a `MockHttpClient` in a test.
 | Picture of the act | no: the file is an index; the act is at the town hall of the place of death |
 | Access | free, no key |
 
-Documentation: [docs/](docs/index.md). License: LGPL-3.0-or-later.
+Documentation: [docs/](docs/index.md). License: MIT since 2026-10-09; earlier versions remain published under LGPL-3.0-or-later.
