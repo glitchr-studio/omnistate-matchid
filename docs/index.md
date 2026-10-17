@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-composer require glitchr/omnistate omnistate/matchid
+composer require omniscient/omnistate omnistate/matchid
 ```
 
 In a Symfony application, `Omnistate\Bridge\Symfony\OmnistateBundle` registers it when it is installed:
