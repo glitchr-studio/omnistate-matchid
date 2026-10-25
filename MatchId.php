@@ -100,7 +100,7 @@ final class MatchId implements CivilRegistryInterface
         if (!preg_match('/^[\w-]{6,40}$/', $identifier)) {
             return null;
         }
-        $person = $this->ask('/id/'.$identifier)['response']['persons'][0] ?? null;
+        $person = $this->ask('/id/'.$identifier, [], true)['response']['persons'][0] ?? null;
 
         return null === $person ? null : $this->record($person);
     }
@@ -121,7 +121,8 @@ final class MatchId implements CivilRegistryInterface
     }
 
     /** @return array<string, mixed> */
-    private function ask(string $path, array $query = []): array
+    /** @param bool $find a lookup: a 404 is no such person (an empty answer) */
+    private function ask(string $path, array $query = [], bool $find = false): array
     {
         $headers = ['Accept' => 'application/json'];
         if (null !== $this->token && '' !== $this->token) {
@@ -134,6 +135,12 @@ final class MatchId implements CivilRegistryInterface
                 $retry = $response->getHeaders(false)['retry-after'][0] ?? null;
 
                 throw new UnavailableException(sprintf('matchID answered %d.', $status), is_numeric($retry) ? (int) $retry : (429 === $status ? 60 : null));
+            }
+            if (401 === $status || 403 === $status) {
+                throw new UnavailableException(sprintf('matchID refused the call (%d): the token is missing or refused.', $status));
+            }
+            if ($find && 404 === $status) {
+                return [];
             }
             $answer = $response->toArray(false);
         } catch (ExceptionInterface $e) {
