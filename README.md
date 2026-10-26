@@ -1,7 +1,7 @@
 # omnistate/matchid
 
 France's deaths since 1970 - INSEE's file of deceased persons - searched through
-[matchID](https://deces.matchid.io), for [omniscient/omnistate](https://github.com/glitchr-studio/omnistate).
+[matchID](https://deces.matchid.io), for [omnisense/omnistate](https://github.com/glitchr-omnisense/omnistate).
 
 ```php
 $registry = new MatchId($httpClient);                       // a token as 2nd argument raises the quota
@@ -13,7 +13,7 @@ $records[0]->number;                    // the act's number: 129
 $registry->find($records[0]->identifier);
 ```
 
-No framework needed: the package requires `omniscient/omnistate` and `symfony/http-client`.
+No framework needed: the package requires `omnisense/omnistate` and `symfony/http-client`.
 `$httpClient` is the HTTP client to call with - the application's, `HttpClient::create()` in
 plain PHP, a `MockHttpClient` in a test.
 

@@ -1,6 +1,6 @@
 # omnistate/matchid
 
-France's deaths since 1970 for [omniscient/omnistate](https://github.com/glitchr-studio/omnistate):
+France's deaths since 1970 for [omnisense/omnistate](https://github.com/glitchr-omnisense/omnistate):
 INSEE's file of deceased persons (*fichier des personnes décédées*), searched through
 [matchID](https://deces.matchid.io), run by the French Ministry of the Interior. One record per
 death: the names, the sex, the date and place of birth, the date and place of death, the act's
@@ -17,10 +17,10 @@ The base address is the constant `MatchId::URL` (or the `url` argument); a recor
 ## Installation
 
 ```sh
-composer require omniscient/omnistate omnistate/matchid
+composer require omnisense/omnistate omnistate/matchid
 ```
 
-Requires PHP 8.2, `omniscient/omnistate` (1.x) and `symfony/http-client` (6.4, 7 or 8). In a
+Requires PHP 8.2, `omnisense/omnistate` (1.x) and `symfony/http-client` (6.4, 7 or 8). In a
 Symfony application, `Omnistate\Bridge\Symfony\OmnistateBundle` registers it when it is installed
 (tag `omnistate.civil_registry`):
 
@@ -136,7 +136,7 @@ NULL
 
 Through the facade, with the other civil registers: `$omnistate->civilRecords($query)`, or
 `$omnistate->civilRecords($query, 'matchid')` for this one only
-([civil registers](https://github.com/glitchr-studio/omnistate/blob/1.x/docs/civil.md)).
+([civil registers](https://github.com/glitchr-omnisense/omnistate/blob/1.x/docs/civil.md)).
 
 ## Errors
 
