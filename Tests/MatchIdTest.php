@@ -133,4 +133,30 @@ final class MatchIdTest extends TestCase
         $this->expectExceptionMessage('invalid birthDate value: banana');
         (new MatchId(new MockHttpClient(new MockResponse('{"msg":["invalid birthDate value: banana"]}', ['http_code' => 400]))))->search(new CivilQuery(familyName: 'Chirac'));
     }
+
+    /**
+     * Not reached: nothing of the credential anywhere in what a log of the whole chain writes - the
+     * messages, the previous exception (a copy of the HTTP client's, its class kept, rather than the
+     * client's own, whose trace kept the request's headers), the traces' arguments when
+     * zend.exception_ignore_args is off.
+     */
+    public function testNoPartOfAnUnreachableChainHoldsTheCredential(): void
+    {
+        $ignoreArgs = ini_set('zend.exception_ignore_args', '0');
+        $http = new \Symfony\Component\HttpClient\MockHttpClient(static function (string $method, string $url): never {
+            throw new \Symfony\Component\HttpClient\Exception\TransportException(\sprintf('Could not resolve host: deces.matchid.io for "%s".', $url));
+        });
+        try {
+            (new MatchId($http, 'matchid-token-1234567'))->find('abcdef');
+            self::fail('no exception');
+        } catch (\Omnistate\Exception\UnavailableException $e) {
+            self::assertInstanceOf(\Symfony\Component\HttpClient\Exception\TransportException::class, $e->getPrevious());
+            for ($one = $e; null !== $one; $one = $one->getPrevious()) {
+                self::assertFalse(str_contains($one->getMessage(), 'matchid-token-1234567'), $one->getMessage());
+                self::assertFalse(str_contains(print_r($one->getTrace(), true), 'matchid-token-1234567'), 'a trace holds the credential');
+            }
+        } finally {
+            ini_set('zend.exception_ignore_args', false !== $ignoreArgs ? $ignoreArgs : '1');
+        }
+    }
 }

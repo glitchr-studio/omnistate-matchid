@@ -4,6 +4,7 @@ namespace Omnistate\MatchId;
 
 use Omnistate\Exception\OmnistateException;
 use Omnistate\Exception\UnavailableException;
+use Omnistate\Http\Redaction;
 use Omnistate\Identifier\CountryCode;
 use Omnistate\Model\Archive;
 use Omnistate\Model\CivilPerson;
@@ -144,7 +145,10 @@ final class MatchId implements CivilRegistryInterface
             }
             $answer = $response->toArray(false);
         } catch (ExceptionInterface $e) {
-            throw new UnavailableException('matchID did not answer: '.$e->getMessage(), null, $e);
+            // The token, in the request's headers, kept out: the previous a copy of the client's exception, no trace keeping the options.
+            $secrets = array_values(array_filter([(string) $this->token]));
+
+            throw Redaction::withoutArguments(new UnavailableException('matchID did not answer: '.Redaction::text($e->getMessage(), $secrets), null, Redaction::copy($e, $secrets)));
         }
         if ($status >= 400) {
             throw new OmnistateException(sprintf('matchID refused the question (%d): %s', $status, implode(' ', (array) ($answer['msg'] ?? ''))));
